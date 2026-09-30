@@ -8,6 +8,7 @@ import {
   Building2,
   CheckCircle2,
   HeartHandshake,
+  LayoutDashboard,
   Mail,
   MessageCircle,
   Send,
@@ -162,6 +163,14 @@ export function Encuesta({ edificioSlug, servicioSlug }: { edificioSlug?: string
       <header className="border-b border-pizarra/8 bg-white">
         <div className="mx-auto flex h-16 max-w-xl items-center justify-between px-5">
           <LogoConvivir />
+          {(paso === "bienvenida" || paso === "resultado") && (
+            <Link
+              to="/admin"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-pizarra/15 bg-white px-3.5 font-display text-sm font-semibold text-pizarra transition hover:bg-niebla"
+            >
+              <LayoutDashboard className="h-4 w-4" /> Panel admin
+            </Link>
+          )}
           {typeof paso === "number" && (
             <span className="font-display text-sm font-semibold text-pizarra/60">
               {numPregunta} de {TOTAL_PREGUNTAS}
