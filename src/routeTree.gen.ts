@@ -9,38 +9,111 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SalaRouteImport } from './routes/sala'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminRespuestasRouteImport } from './routes/admin.respuestas'
+import { Route as AdminEnlacesRouteImport } from './routes/admin.enlaces'
 
+const SalaRoute = SalaRouteImport.update({
+  id: '/sala',
+  path: '/sala',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRespuestasRoute = AdminRespuestasRouteImport.update({
+  id: '/respuestas',
+  path: '/respuestas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminEnlacesRoute = AdminEnlacesRouteImport.update({
+  id: '/enlaces',
+  path: '/enlaces',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/sala': typeof SalaRoute
+  '/admin/enlaces': typeof AdminEnlacesRoute
+  '/admin/respuestas': typeof AdminRespuestasRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sala': typeof SalaRoute
+  '/admin/enlaces': typeof AdminEnlacesRoute
+  '/admin/respuestas': typeof AdminRespuestasRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/sala': typeof SalaRoute
+  '/admin/enlaces': typeof AdminEnlacesRoute
+  '/admin/respuestas': typeof AdminRespuestasRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/sala'
+    | '/admin/enlaces'
+    | '/admin/respuestas'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/sala' | '/admin/enlaces' | '/admin/respuestas' | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/sala'
+    | '/admin/enlaces'
+    | '/admin/respuestas'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  SalaRoute: typeof SalaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sala': {
+      id: '/sala'
+      path: '/sala'
+      fullPath: '/sala'
+      preLoaderRoute: typeof SalaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +121,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/respuestas': {
+      id: '/admin/respuestas'
+      path: '/respuestas'
+      fullPath: '/admin/respuestas'
+      preLoaderRoute: typeof AdminRespuestasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/enlaces': {
+      id: '/admin/enlaces'
+      path: '/enlaces'
+      fullPath: '/admin/enlaces'
+      preLoaderRoute: typeof AdminEnlacesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminEnlacesRoute: typeof AdminEnlacesRoute
+  AdminRespuestasRoute: typeof AdminRespuestasRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminEnlacesRoute: AdminEnlacesRoute,
+  AdminRespuestasRoute: AdminRespuestasRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  SalaRoute: SalaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

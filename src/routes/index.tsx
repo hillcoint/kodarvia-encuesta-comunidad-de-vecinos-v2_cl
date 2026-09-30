@@ -1,33 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Encuesta } from "@/components/encuesta/Encuesta";
+
+type BusquedaEncuesta = { edificio?: string; servicio?: string };
 
 export const Route = createFileRoute("/")({
+  // Parámetros de los enlaces/QR: /?edificio=<slug>&servicio=<slug>
+  validateSearch: (search: Record<string, unknown>): BusquedaEncuesta => {
+    const r: BusquedaEncuesta = {};
+    if (typeof search["edificio"] === "string") r.edificio = search["edificio"];
+    if (typeof search["servicio"] === "string") r.servicio = search["servicio"];
+    return r;
+  },
   head: () => ({
     meta: [
-      { title: "Kodarvia — Comunidad de Vecinos" },
+      { title: "Valora tu comunidad · Convivir" },
       {
         name: "description",
-        content: "Proyecto base de Kodarvia, comunidad de vecinos. Aplicación en construcción.",
+        content: "Valora en menos de 1 minuto los servicios técnicos y administrativos de tu comunidad.",
       },
-      { property: "og:title", content: "Kodarvia — Comunidad de Vecinos" },
+      { property: "og:title", content: "Valora tu comunidad · Convivir" },
       {
         property: "og:description",
-        content: "Proyecto base de Kodarvia, comunidad de vecinos. Aplicación en construcción.",
+        content: "Valora en menos de 1 minuto los servicios técnicos y administrativos de tu comunidad.",
       },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Index,
+  component: PaginaEncuesta,
 });
 
-function Index() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-      <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-        Comunidad de Vecinos
-      </h1>
-      <p className="mt-3 text-lg text-foreground sm:text-xl">Proyecto base</p>
-      <p className="mt-6 text-sm text-muted-foreground">Aplicación en construcción</p>
-    </main>
-  );
+function PaginaEncuesta() {
+  const { edificio, servicio } = Route.useSearch();
+  return <Encuesta {...(edificio ? { edificioSlug: edificio } : {})} {...(servicio ? { servicioSlug: servicio } : {})} />;
 }
