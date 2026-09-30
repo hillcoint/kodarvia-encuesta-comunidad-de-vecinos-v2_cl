@@ -4,7 +4,11 @@ Aplicación web **mobile-first** para **Gestión de Comunidades Convivir** (Colo
 
 **Todo funciona en el navegador con `localStorage`.** No hay backend, base de datos ni servicios externos.
 
-- **URL pública de previsualización:** _pendiente de publicar desde Lovable (Publish)_
+- **URL pública de previsualización:** https://convivir-comunidad-vecinos-cl-v2.lovable.app
+  - Encuesta: https://convivir-comunidad-vecinos-cl-v2.lovable.app/
+  - Panel de administración: https://convivir-comunidad-vecinos-cl-v2.lovable.app/admin
+  - Vista de sala: https://convivir-comunidad-vecinos-cl-v2.lovable.app/sala
+  - Ejemplo de enlace de QR: https://convivir-comunidad-vecinos-cl-v2.lovable.app/?edificio=torres-del-refugio&servicio=mantenimiento-de-ascensores
 - **Proyecto Lovable:** https://lovable.dev/projects/9d46b214-3e04-4798-b2f9-3f955096c994
 
 ---
